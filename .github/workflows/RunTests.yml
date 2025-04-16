@@ -14,7 +14,7 @@ jobs:
     steps:        
     
     - name: UpdatePackages
-      run: sudo apt-get update && sudo apt install openmpi-bin
+      run: sudo apt-get update
     
     - name: CheckoutRepository
       uses: actions/checkout@v4
