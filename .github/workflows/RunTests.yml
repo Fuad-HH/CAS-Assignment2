@@ -23,7 +23,12 @@ jobs:
       run: bash ${GITHUB_WORKSPACE}/ActionsInstall.sh
 
     - name: TestCode
-      run: cd build/ && make test
+      run: |
+        cd build/ 
+        export OMP_NUM_THREADS=2
+        export OMP_PLACES=threads
+        export OMP_PROC_BIND=spread
+        make test
     
     - name: Results
       run: cd build/Testing/Temporary && cat LastTest.log
