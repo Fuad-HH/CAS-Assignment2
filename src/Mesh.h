@@ -25,17 +25,25 @@ class Mesh
     public:
     Mesh(const std::string filename);
 
-    // Get the physical x or y coordinate of an element node on the host Kokkos::View.
+    // Get the physical x or y coordinate of an element node on the host Kokkos::View
     [[nodiscard]] KOKKOS_INLINE_FUNCTION 
     double GetCoordinate(int element, int node, int dim) const {return data_(element,node,dim+1);}
 
-    // Get the global degree of freedom on the host Kokkos::View.
+    // Get the global degree of freedom on the host Kokkos::View
     [[nodiscard]] KOKKOS_INLINE_FUNCTION 
     int GetGlobalDof(int element, int node) const {return data_(element,node,0);}
 
     // Get the device view data_ containing the dofs and physical coordinates
     [[nodiscard]] KOKKOS_INLINE_FUNCTION 
     Kokkos::View<double***, Kokkos::DefaultExecutionSpace> GetData() const {return data_;}
+
+    // Get the number of elements in the mesh
+    [[nodiscard]]
+    const double GetNumElements() const {return numElements_;}
+
+    // Get the number of nodes per element for the given mesh type
+    [[nodiscard]]
+    const int GetNumNodesPerElement() const {return static_cast<int>(meshType_);}
     
     private:
     size_t numVertices_ = 0;
