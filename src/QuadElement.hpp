@@ -106,10 +106,6 @@ class QuadElement : public Element {
 
   KOKKOS_INLINE_FUNCTION
   void computeElementStiffnessMatrix(double* stiffness) const override {
-    // Initialize stiffness matrix
-    for (int i = 0; i < numNodes_ * numNodes_; i++) {
-      stiffness[i] = 0.0;
-    }
 
     // Get coordinates of quadrilateral vertices
     double x[4], y[4];
@@ -157,7 +153,7 @@ class QuadElement : public Element {
           double dNj_dy = -dxdeta * dNj_dxi + dxdxi * dNj_deta;
 
           stiffness[i * numNodes_ + j] +=
-              (dNi_dx * dNj_dx + dNi_dy * dNj_dy) * invJ * weight;
+              k_ * (dNi_dx * dNj_dx + dNi_dy * dNj_dy) * invJ * weight;
         }
       }
     }
@@ -166,12 +162,6 @@ class QuadElement : public Element {
   KOKKOS_INLINE_FUNCTION
   void computeElementLoadVector(double* load) const override {
     // Create load vector (4 entries)
-
-    // Initialize load vector
-    for (int i = 0; i < numNodes_; i++) {
-      load[i] = 0.0;
-    }
-
     double f = 1.0;
 
     // Integrate load using quadrature

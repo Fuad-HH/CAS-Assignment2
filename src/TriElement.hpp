@@ -91,11 +91,6 @@ class TriElement : public Element {
   KOKKOS_INLINE_FUNCTION
   void computeElementStiffnessMatrix(double* stiffness) const override {
     // Get coordinates of triangle vertices
-
-    for (int i = 0; i < numNodes_ * numNodes_; i++) {
-      stiffness[i] = 0.0;
-    }
-
     double x[3], y[3];
     for (int i = 0; i < 3; i++) {
       x[i] = mesh_.GetCoordinate(elemIdx_, i, 0);
@@ -141,7 +136,7 @@ class TriElement : public Element {
           double dNj_dy = -dxdeta * dNj_dxi + dxdxi * dNj_deta;
 
           stiffness[i * numNodes_ + j] +=
-              (dNi_dx * dNj_dx + dNi_dy * dNj_dy) * invJ * weight;
+              k_ * (dNi_dx * dNj_dx + dNi_dy * dNj_dy) * invJ * weight;
         }
       }
     }
